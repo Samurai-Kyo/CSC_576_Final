@@ -74,7 +74,7 @@ public class toss : MonoBehaviour {
         bool paused = GetComponent<player>().paused;
 
         // If player presses E, throw flare
-        if (!paused && Input.GetKeyDown(KeyCode.E) && numFlares > 0) {
+        if (!paused && Input.GetKeyDown(KeyCode.F) && numFlares > 0) {
             numFlares--;
             StartCoroutine(Toss());
         }
