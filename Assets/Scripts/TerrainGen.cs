@@ -123,16 +123,21 @@ public class TerrainGen : MonoBehaviour
     // Post-process terrain so there is a flat area at the center for a campsite
     float[,] PostProcess(float[,] heights) {
         float k = 0.00003f; // found via trial and error
-        
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 float d = Mathf.Sqrt((width/2 - x) * (width/2 - x) + (height/2 - y) * (height/2 - y));
 
-                // Multiply all heights by 1-e^(-kd^4), where d is the distance from the center
-                // We will clamp this scaling value to a minumum of 0.4 so that changes in heights are not too drastic
-                float scale = 1 - Mathf.Exp(-k * Mathf.Pow(d,4));
-                scale = Mathf.Clamp(scale, 0.4f, 1f);
-                heights[x, y] *= scale;
+
+                if (d < 10) { // Force campsite height to 0.5
+                    heights[x, y] = 0.5f;
+                }
+                else if (d >= 10 && d <= 20) { // smooth transition from campsite to surrounding terrain
+                    float scale = 1 - Mathf.Exp(-k * Mathf.Pow(d, 4));
+                    scale = Mathf.Clamp(scale, 0.5f, 1f);
+                    heights[x, y] = Mathf.Clamp(heights[x,y] * scale, 0.5f, 1);
+                }
+
             }
         }
         return heights;

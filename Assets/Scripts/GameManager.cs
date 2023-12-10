@@ -29,18 +29,6 @@ public class GameManager : MonoBehaviour {
 
     // TODO: spawn robots
 
-    void SpawnCampSite() {
-        // Spawn radio tower in middle of terrain
-        float y = terrain.SampleHeight(new Vector3(xMax/2, 0, zMax/2));
-        Vector3 tower_pos = new Vector3(xMax/2, y, zMax/2);
-        Instantiate(tower_prefab, tower_pos, Quaternion.identity);
-
-        // Spawn firepit rocks offset from tower
-        Vector3 rock_pos = tower_pos + new Vector3(0, 0, 5);
-        y = terrain.SampleHeight(rock_pos);
-        rock_pos.y = y;
-        Instantiate(rocks_prefab, rock_pos, Quaternion.identity);
-    }
 
     // Spawns the given prefab n times randomly throughout the world
     void SpawnNPrefabs(GameObject prefab, int n) {
@@ -91,7 +79,6 @@ public class GameManager : MonoBehaviour {
         generator.Generate();
 
         // ---- Spawning ----
-        SpawnCampSite();
         SpawnItems(1, 1, 1, 1);
         // ------------------
 
