@@ -77,8 +77,7 @@ public class GameManager : MonoBehaviour
     // Creates an explosion at the specified location
     // Need to do this here rather than in robot scrip[t since destroying the robot
     // cuts the animation and sound off early
-    public void Explosion(Vector3 position)
-    {
+    public void Explosion(Vector3 position) {
         src.PlayOneShot(explosion_clip, 2f);
         Instantiate(explosion_fx, position, Quaternion.identity);
     }

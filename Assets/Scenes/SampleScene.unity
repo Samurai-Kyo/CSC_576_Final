@@ -6950,6 +6950,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: a7e885aac7fecc042918887a24b250d5, type: 3}
     - target: {fileID: 6059911279378881821, guid: 4c47b0cd54ac95f40ab8573829cc2ec1, type: 3}
+      propertyPath: explosion_light
+      value: 
+      objectReference: {fileID: 3912404421276680778, guid: 8baa72d24a619bf428b576b469917b03, type: 3}
+    - target: {fileID: 6059911279378881821, guid: 4c47b0cd54ac95f40ab8573829cc2ec1, type: 3}
       propertyPath: signpost_prefab
       value: 
       objectReference: {fileID: 8747791721951766112, guid: c9ec32e7299ba7f4b9406f1c93764815, type: 3}

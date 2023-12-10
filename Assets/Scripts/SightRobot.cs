@@ -19,7 +19,7 @@ public class SightRobot : RobotBase
         // Set light distance to whatever the range of the flashlight is
         light_distance = GameObject.Find("Spot Light").GetComponent<Light>().range;
 
-
+        target = transform.position; // for some reason this line is needed to get them to start moving
         StartCoroutine(Sense());
     }
 

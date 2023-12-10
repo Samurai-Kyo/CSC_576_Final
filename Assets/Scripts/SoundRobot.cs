@@ -16,6 +16,7 @@ public class SoundRobot : RobotBase
     void Start()
     {
         Init();
+        target = transform.position; // for some reason this line is needed to get them to start moving
         StartCoroutine(Sense());
     }
 
