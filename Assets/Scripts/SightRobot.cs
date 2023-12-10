@@ -25,7 +25,8 @@ public class SightRobot : RobotBase
 
 
     // Returns whether the player can be seen by the robot
-    protected override bool canSensePlayer() {
+    protected override bool canSensePlayer()
+    {
         // Determine view distance based on if flashlight is on or off
         Vector3 to_player = player.transform.position - transform.position;
         bool flashlight_is_on = player.GetComponentInChildren<Light>().enabled;
@@ -48,10 +49,13 @@ public class SightRobot : RobotBase
     }
 
     // Returns true if the robot can see a flare
-    protected override bool canSenseFlare() {
+    protected override bool canSenseFlare()
+    {
         GameObject[] flare = GameObject.FindGameObjectsWithTag("flare");
-        foreach (GameObject f in flare) {
-            if (distance_2d(f.transform.position, transform.position) < flare_distance) {
+        foreach (GameObject f in flare)
+        {
+            if (distance_2d(f.transform.position, transform.position) < flare_distance)
+            {
                 flare_to_follow = f;
                 return true;
             }
@@ -66,8 +70,14 @@ public class SightRobot : RobotBase
         WaitForSeconds wait = new WaitForSeconds(senseDelay);
         Vector3 campsite = GameObject.Find("campsite_center").transform.position;
 
-        while (true) {
-            animator.SetBool("attack", false); // false by default
+        while (true)
+        {
+
+            // If robot is close to player, explode
+            if (distance_2d(player.transform.position, transform.position) < 2 * target_error)
+            {
+                Explode();
+            }
 
             // If too much time has passed, set seen_player_recently to false
             if (Time.time - sensed_timestamp > sensedSeconds)
@@ -101,7 +111,6 @@ public class SightRobot : RobotBase
             // Pursue player
             else if (canSensePlayer())
             {
-
                 // Limit playing sound to at most once every 5 seconds
                 if (Time.time - sensed_timestamp > 5)
                 {
@@ -116,15 +125,6 @@ public class SightRobot : RobotBase
                 animator.SetBool("walk", false);
                 animator.SetBool("jog", false);
                 animator.SetBool("run", true);
-
-                // If robot is close to player, attack
-                if (distance_2d(player.transform.position, transform.position) < target_error)
-                {
-                    animator.SetBool("attack", true);
-                    speed = 0;
-                    yield return new WaitForSeconds(0.5f);
-                }
-
             }
 
             // Follow if we have seen the player recently and they are close enough
@@ -138,7 +138,8 @@ public class SightRobot : RobotBase
             }
 
             // Wander
-            else if (!is_wandering) {
+            else if (!is_wandering)
+            {
                 is_wandering = true;
 
                 // Move to random location
@@ -154,7 +155,8 @@ public class SightRobot : RobotBase
             }
 
             // If robot is close to target, idle
-            if (distance_2d(target, transform.position) < target_error) {
+            if (distance_2d(target, transform.position) < target_error)
+            {
                 speed = 0;
                 animator.SetBool("walk", false);
                 animator.SetBool("jog", false);
@@ -163,7 +165,8 @@ public class SightRobot : RobotBase
 
             // If target is in campsite (near radio tower), run in opposite direction
             // since robots don't like the radio tower
-            if (distance_2d(target, campsite) < 12) {
+            if (distance_2d(target, campsite) < 12)
+            {
                 Vector3 direction = campsite - transform.position;
                 target = -10 * direction.normalized + transform.position;
             }

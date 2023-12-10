@@ -92,6 +92,13 @@ public abstract class RobotBase : MonoBehaviour
         return Mathf.Sqrt(square);
     }
 
+    protected void Explode()
+    {
+        player.GetComponent<player>().health -= 1;
+        GameObject.Find("GameManager").GetComponent<GameManager>().Explosion(transform.position);
+        Destroy(this.gameObject);
+    }
+
 
     protected void Update()
     {

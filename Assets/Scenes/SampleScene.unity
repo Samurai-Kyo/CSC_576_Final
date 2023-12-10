@@ -6930,6 +6930,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8735572933125239634, guid: 139b9fd853b7d2e46a786f5305d9e77f, type: 3}
     - target: {fileID: 6059911279378881821, guid: 4c47b0cd54ac95f40ab8573829cc2ec1, type: 3}
+      propertyPath: explosion_fx
+      value: 
+      objectReference: {fileID: 1059774927106906346, guid: 3c64f64a692744249acc7c2588ad68fb, type: 3}
+    - target: {fileID: 6059911279378881821, guid: 4c47b0cd54ac95f40ab8573829cc2ec1, type: 3}
       propertyPath: rocks_prefab
       value: 
       objectReference: {fileID: 7229905623280611709, guid: d3a1887147f325742aae8883c5e9b89c, type: 3}
@@ -6941,6 +6945,10 @@ PrefabInstance:
       propertyPath: barrel_prefab
       value: 
       objectReference: {fileID: 7078047064711543744, guid: 1d78e1adb23923e46bce22671509cba8, type: 3}
+    - target: {fileID: 6059911279378881821, guid: 4c47b0cd54ac95f40ab8573829cc2ec1, type: 3}
+      propertyPath: explosion_clip
+      value: 
+      objectReference: {fileID: 8300000, guid: a7e885aac7fecc042918887a24b250d5, type: 3}
     - target: {fileID: 6059911279378881821, guid: 4c47b0cd54ac95f40ab8573829cc2ec1, type: 3}
       propertyPath: signpost_prefab
       value: 

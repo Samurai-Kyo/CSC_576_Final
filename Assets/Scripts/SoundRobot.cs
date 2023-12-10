@@ -20,11 +20,13 @@ public class SoundRobot : RobotBase
     }
 
     // Returns whether the player can be heard by the robot
-    protected override bool canSensePlayer() {
+    protected override bool canSensePlayer()
+    {
         float playerSpeed = player.GetComponent<CharacterController>().velocity.magnitude;
 
         // Running
-        if (player.GetComponent<player>().isRunning && distance_2d(player.transform.position, transform.position) < hear_distance_running) {
+        if (player.GetComponent<player>().isRunning && distance_2d(player.transform.position, transform.position) < hear_distance_running)
+        {
             return playerSpeed > 5f;
         }
         // Crouching
@@ -33,17 +35,21 @@ public class SoundRobot : RobotBase
             return playerSpeed > 1f;
         }
         // Walking
-        else if (distance_2d(player.transform.position, transform.position) < hear_distance) {
+        else if (distance_2d(player.transform.position, transform.position) < hear_distance)
+        {
             return playerSpeed > 2f;
         }
         return false;
     }
 
     // Returns true if the robot can hear a flare
-    protected override bool canSenseFlare() {
+    protected override bool canSenseFlare()
+    {
         GameObject[] flare = GameObject.FindGameObjectsWithTag("flare");
-        foreach( GameObject f in flare) {
-            if (distance_2d(f.transform.position, transform.position) < flare_distance) {
+        foreach (GameObject f in flare)
+        {
+            if (distance_2d(f.transform.position, transform.position) < flare_distance)
+            {
                 flare_to_follow = f;
                 return true;
             }
@@ -54,23 +60,31 @@ public class SoundRobot : RobotBase
 
     // Robot will collect information about it's surroundings
     // Make it a corotuine to improve performance - run a few times a second instead of 30-60 times a second
-    protected override IEnumerator Sense() {
+    protected override IEnumerator Sense()
+    {
         WaitForSeconds wait = new WaitForSeconds(senseDelay);
         Vector3 campsite = GameObject.Find("campsite_center").transform.position;
 
-        while (true) {
+        while (true)
+        {
 
-            animator.SetBool("attack", false); // false by default
+            // If robot is close to player, explode
+            if (distance_2d(player.transform.position, transform.position) < 2 * target_error)
+            {
+                Explode();
+            }
 
 
             // If too much time has passed, set heard_player_recently to false
-            if (Time.time - sensed_timestamp > sensedSeconds) {
+            if (Time.time - sensed_timestamp > sensedSeconds)
+            {
                 sensed_player_recently = false;
             }
 
             // Choose new random location to wander to by setting is_wandering to false
             // when robot gets close to its target
-            if (is_wandering && distance_2d(target, transform.position) < target_error) {
+            if (is_wandering && distance_2d(target, transform.position) < target_error)
+            {
                 animator.SetBool("walk", false);
                 animator.SetBool("jog", false);
                 animator.SetBool("run", false);
@@ -80,7 +94,8 @@ public class SoundRobot : RobotBase
             }
 
             // Pursue flare
-            if (canSenseFlare()) {
+            if (canSenseFlare())
+            {
                 speed = runSpeed;
                 target = flare_to_follow.transform.position;
 
@@ -90,10 +105,12 @@ public class SoundRobot : RobotBase
             }
 
             // Pursue player
-            else if (canSensePlayer()) {
+            else if (canSensePlayer())
+            {
 
                 // Limit playing sound to at most once every 5 seconds
-                if (Time.time - sensed_timestamp > 5) {
+                if (Time.time - sensed_timestamp > 5)
+                {
                     other_src.PlayOneShot(seen_clip);
                 }
 
@@ -105,18 +122,11 @@ public class SoundRobot : RobotBase
                 animator.SetBool("walk", false);
                 animator.SetBool("jog", false);
                 animator.SetBool("run", true);
-
-                // If robot is close to player, attack
-                if (distance_2d(player.transform.position, transform.position) < target_error) {
-                    animator.SetBool("attack", true);
-                    speed = 0;
-                    yield return new WaitForSeconds(0.5f);
-                }
-
             }
 
             // Go to if we have seen the player recently and they are close enough
-            else if (sensed_player_recently && distance_2d(transform.position, player.transform.position) < hear_distance) {
+            else if (sensed_player_recently && distance_2d(transform.position, player.transform.position) < hear_distance)
+            {
                 speed = jogSpeed;
                 target = player.transform.position;
                 animator.SetBool("walk", false);
@@ -125,7 +135,8 @@ public class SoundRobot : RobotBase
             }
 
             // Wander
-            else if (!is_wandering){
+            else if (!is_wandering)
+            {
 
                 is_wandering = true;
 
@@ -141,8 +152,9 @@ public class SoundRobot : RobotBase
                 animator.SetBool("run", false);
             }
 
-            // If robot is close to target, idle
-            if (distance_2d(target, transform.position) < target_error) {
+            // If robot is close to non-player target, idle
+            if (!canSensePlayer() && distance_2d(target, transform.position) < target_error)
+            {
                 speed = 0;
                 animator.SetBool("walk", false);
                 animator.SetBool("jog", false);
@@ -151,9 +163,10 @@ public class SoundRobot : RobotBase
 
             // If target is in campsite (near radio tower), run in opposite direction
             // since robots don't like the radio tower
-            if (distance_2d(target, campsite) < 12) {
+            if (distance_2d(target, campsite) < 12)
+            {
                 Vector3 direction = campsite - transform.position;
-                target = -10*direction.normalized + transform.position;
+                target = -10 * direction.normalized + transform.position;
             }
 
             yield return wait;

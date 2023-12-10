@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEditor;
-using Palmmedia.ReportGenerator.Core;
 
-public class GameManager : MonoBehaviour {
-
+public class GameManager : MonoBehaviour
+{
     // Audio
     public AudioSource src;
     public AudioClip storm;
+    public AudioClip explosion_clip;
 
     private Terrain terrain;
     public int xMin = 1;
@@ -26,13 +26,19 @@ public class GameManager : MonoBehaviour {
     public GameObject log_prefab;
     public GameObject pot_prefab;
 
+    // Explosion particle system
+    public GameObject explosion_fx;
+
+
 
     // TODO: spawn robots
 
 
     // Spawns the given prefab n times randomly throughout the world
-    void SpawnNPrefabs(GameObject prefab, int n) {
-        for (int i = 0; i < n; i++) {
+    void SpawnNPrefabs(GameObject prefab, int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
             float x = Random.Range(xMin, xMax);
             float z = Random.Range(zMin, zMax);
             float y = terrain.SampleHeight(new Vector3(x, 0, z)) + 0.1f;
@@ -40,10 +46,12 @@ public class GameManager : MonoBehaviour {
             // Adjust position and rotation based on which prefab it is
             Vector3 position = new Vector3(x, y, z);
             Quaternion rotation = Quaternion.identity;
-            if (prefab == tarp_prefab) {
+            if (prefab == tarp_prefab)
+            {
                 rotation = Quaternion.Euler(90f, 0, 0);
             }
-            else if (prefab == barrel_prefab) {
+            else if (prefab == barrel_prefab)
+            {
                 position.y += 0.5f;
             }
             else if (prefab == pot_prefab)
@@ -55,21 +63,31 @@ public class GameManager : MonoBehaviour {
             Instantiate(item_prefab, position + new Vector3(0, 1, 0), Quaternion.identity);
         }
     }
-  
+
 
     // Spawns a given number of each item throughout the world randomly
-    void SpawnItems(int numTarps, int numLogs, int numBarrels, int numPots) { 
+    void SpawnItems(int numTarps, int numLogs, int numBarrels, int numPots)
+    {
         SpawnNPrefabs(tarp_prefab, numTarps);
         SpawnNPrefabs(log_prefab, numLogs);
         SpawnNPrefabs(barrel_prefab, numBarrels);
         SpawnNPrefabs(pot_prefab, numPots);
     }
 
+    // Creates an explosion at the specified location
+    // Need to do this here rather than in robot scrip[t since destroying the robot
+    // cuts the animation and sound off early
+    public void Explosion(Vector3 position)
+    {
+        src.PlayOneShot(explosion_clip, 2f);
+        Instantiate(explosion_fx, position, Quaternion.identity);
+    }
 
 
 
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         // Seed RNG
         Random.InitState((int)System.DateTime.Now.Ticks);
 
