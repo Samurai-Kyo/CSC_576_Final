@@ -16,8 +16,8 @@ public class camp_spawner : MonoBehaviour
     private GameObject fire;
     private GameObject water_catcher_spawner;
     private GameObject water_catcher;
-    // private GameObject fence_spawner;
-    // private GameObject fence;
+    private GameObject fence_spawner;
+    private GameObject fence;
 
 
     // Start is called before the first frame update
@@ -25,40 +25,32 @@ public class camp_spawner : MonoBehaviour
     {
         tent = tent_area.transform.GetChild(0).gameObject;
         tent_spawner = tent_area.transform.GetChild(1).gameObject;
-        
+
         fire_spawner = fire_area.transform.GetChild(5).gameObject;
         fire = fire_area.transform.GetChild(4).gameObject;
         water_catcher_spawner = water_catcher_area.transform.GetChild(0).gameObject;
         water_catcher = water_catcher_area.transform.GetChild(1).gameObject;
-        // fence_spawner;
-        // fence;
+        fence_spawner = fence_area.transform.GetChild(0).gameObject;
+        fence = fence_area.transform.GetChild(1).gameObject;
+
         tent.SetActive(false);
         water_catcher.SetActive(false);
         fire.SetActive(false);
-        // fence.SetActive(false);
-        // make tent spawner not render
+        foreach (Transform child in fence.transform)
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // if player presses e on tent spawner spawn tent
-        // if (Input.GetKeyDown(KeyCode.E) && tent_area.Collider.CompareTag("Player"))
-        // {
-        //     tent.SetActive(true);
-        //     tent_spawner.SetActive(false);
-        // }
-
-
-    }
+    // void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.gameObject.CompareTag("Player"))
+    //     {
+    //         tent_spawner.SetActive(true);
+    //         water_catcher_spawner.SetActive(true);
+    //         fire_spawner.SetActive(true);
+    //         fence_spawner.SetActive(true);
+    //     }
+    // }
 }
-// void OnTriggerEnter(Collider other)
-// {
-//     if (other.gameObject.CompareTag("Player"))
-//     {
-//         tent_spawner.SetActive(true);
-//         water_catcher_spawner.SetActive(true);
-//         fire_spawner.SetActive(true);
-//         fence_spawner.SetActive(true);
-//     }
-// }
+
