@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,8 +17,15 @@ public class GameManager : MonoBehaviour
     public int xMax = 480;
     public int zMin = 1;
     public int zMax = 480;
+    // --------------------------
+
+    // Location of camp
+    public Vector3 campsite_center;
 
     // Prefabs for spawning
+    public GameObject sightRobot_prefab;
+    public GameObject soundRobot_prefab;
+
     public GameObject tower_prefab;
     public GameObject rocks_prefab;
     public GameObject item_prefab;
@@ -25,6 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject barrel_prefab;
     public GameObject log_prefab;
     public GameObject pot_prefab;
+    // --------------------------------
 
     // Explosion particle system
     public GameObject explosion_fx;
@@ -38,11 +47,19 @@ public class GameManager : MonoBehaviour
     // Spawns the given prefab n times randomly throughout the world
     void SpawnNPrefabs(GameObject prefab, int n)
     {
-        for (int i = 0; i < n; i++)
-        {
+        for (int i = 0; i < n; i++) {
             float x = Random.Range(xMin, xMax);
             float z = Random.Range(zMin, zMax);
-            float y = terrain.SampleHeight(new Vector3(x, 0, z)) + 0.1f;
+            float y = terrain.SampleHeight(new Vector3(x, 0, z)) + 1f;
+
+            // Regenerate random point if it is too clsoe to the camp
+            while (RobotBase.distance_2d(campsite_center, new Vector3(x, y, z)) < 20) {
+                x = Random.Range(xMin, xMax);
+                z = Random.Range(zMin, zMax);
+                y = terrain.SampleHeight(new Vector3(x, 0, z)) + 1f;
+            }
+
+            // TODO: ensure things dont spawn close to camp
 
             // Adjust position and rotation based on which prefab it is
             Vector3 position = new Vector3(x, y, z);
@@ -60,19 +77,38 @@ public class GameManager : MonoBehaviour
                 position.y += 1;
             }
 
+            // If it's not a robot prefab, it must be an item prefab, so spawn item marker as well
+            if (prefab != sightRobot_prefab && prefab != soundRobot_prefab) {
+                Instantiate(item_prefab, position + new Vector3(0, 1, 0), Quaternion.identity);
+            }
+
             Instantiate(prefab, position, rotation);
-            Instantiate(item_prefab, position + new Vector3(0, 1, 0), Quaternion.identity);
+
         }
     }
 
 
     // Spawns a given number of each item throughout the world randomly
-    void SpawnItems(int numTarps, int numLogs, int numBarrels, int numPots)
-    {
+    void SpawnItems(int numTarps, int numLogs, int numBarrels, int numPots) {
         SpawnNPrefabs(tarp_prefab, numTarps);
         SpawnNPrefabs(log_prefab, numLogs);
         SpawnNPrefabs(barrel_prefab, numBarrels);
         SpawnNPrefabs(pot_prefab, numPots);
+    }
+
+    void SpawnRobots() {
+        if (difficulty == 0) {
+            SpawnNPrefabs(sightRobot_prefab, 5);
+            SpawnNPrefabs(soundRobot_prefab, 5);
+        }
+        else if (difficulty == 1) {
+            SpawnNPrefabs(sightRobot_prefab, 8);
+            SpawnNPrefabs(soundRobot_prefab, 8);
+        }
+        else {
+            SpawnNPrefabs(sightRobot_prefab, 10);
+            SpawnNPrefabs(soundRobot_prefab, 10);
+        }
     }
 
     // Creates an explosion at the specified location
@@ -99,24 +135,17 @@ public class GameManager : MonoBehaviour
     public int[] getItemCounts() {
         int[] counts = new int[4];
 
-        if (difficulty == 0) { // easy 
-            counts[0] = 10;
-            counts[1] = 10;
-            counts[2] = 10;
-            counts[3] = 10;
-        }
-        else if (difficulty == 1) { // medium
-            counts[0] = 5;
-            counts[1] = 5;
-            counts[2] = 5;
-            counts[3] = 5;
-        }
-        else { // hard
-            counts[0] = 3;
-            counts[1] = 3;
-            counts[2] = 3;
-            counts[3] = 3;
-        }
+        // Minimum number of each resoruce required to win
+        int minTarps = 3;
+        int minLogs = 7;
+        int minBarrels = 1;
+        int minPots = 1;
+
+        counts[0] = minTarps + (3 - difficulty);
+        counts[1] = minLogs + (3 - difficulty);
+        counts[2] = minBarrels + (3 - difficulty);
+        counts[3] = minPots + (3 - difficulty);
+
         return counts;
     }
 
@@ -136,10 +165,12 @@ public class GameManager : MonoBehaviour
         TerrainGen generator = terrain.GetComponent<TerrainGen>();
         generator.Generate();
 
+        campsite_center = GameObject.Find("campsite_center").transform.position;
+
         // ---- Spawning ----
         int[] itemCounts = getItemCounts();
         SpawnItems(itemCounts[0], itemCounts[1], itemCounts[2], itemCounts[3]);
-        // TODO spawn robots
+        SpawnRobots();
         // ------------------
 
 

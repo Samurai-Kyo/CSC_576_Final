@@ -86,7 +86,7 @@ public abstract class RobotBase : MonoBehaviour
 
 
     // Returns the distance between vectors A and B but only considers the X and Z components
-    protected float distance_2d(Vector3 A, Vector3 B)
+    public static float distance_2d(Vector3 A, Vector3 B)
     {
         float square = (A.x - B.x) * (A.x - B.x) + (A.z - B.z) * (A.z - B.z);
         return Mathf.Sqrt(square);
