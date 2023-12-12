@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class toss : MonoBehaviour {
 
-
     public GameObject grenadePrefab;
     public Transform cameraTrans;
     public GameObject flareFX_prefab;
     public GameObject smoke_prefab;
     public GameObject light_prefab;
 
-    public int numFlares = 3;
+    public int numFlares;
     public float delay = 5f;
     public float force = 15.0f;
 
@@ -23,6 +22,11 @@ public class toss : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         cameraTrans = GameObject.Find("Camera").transform;
+
+        // Set number of flares according to difficulty
+        GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gm.loadSettings();
+        numFlares = 3 - gm.difficulty;
     }
 
     IEnumerator Toss() {

@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,9 +29,10 @@ public class GameManager : MonoBehaviour
     // Explosion particle system
     public GameObject explosion_fx;
 
+    // Global volume and difficulty settings
+    public float volume;
+    public int difficulty;
 
-
-    // TODO: spawn robots
 
 
     // Spawns the given prefab n times randomly throughout the world
@@ -82,6 +83,43 @@ public class GameManager : MonoBehaviour
         Instantiate(explosion_fx, position, Quaternion.identity);
     }
 
+    public void loadSettings() {
+        string filepath = Path.Combine(Application.persistentDataPath, "settings.txt");
+        
+        // Read and parse settings
+        string[] settings = File.ReadAllText(filepath).Replace("\n", "").Split(',');
+        float.TryParse(settings[0], out volume);
+        int.TryParse(settings[1], out difficulty);
+
+        // TODO remove
+        Debug.Log(volume.ToString() + " " + difficulty.ToString());
+    }
+
+    // Returns array of 4 items containg the number to spawn depending on the difficulty level
+    public int[] getItemCounts() {
+        int[] counts = new int[4];
+
+        if (difficulty == 0) { // easy 
+            counts[0] = 10;
+            counts[1] = 10;
+            counts[2] = 10;
+            counts[3] = 10;
+        }
+        else if (difficulty == 1) { // medium
+            counts[0] = 5;
+            counts[1] = 5;
+            counts[2] = 5;
+            counts[3] = 5;
+        }
+        else { // hard
+            counts[0] = 3;
+            counts[1] = 3;
+            counts[2] = 3;
+            counts[3] = 3;
+        }
+        return counts;
+    }
+
 
 
     // Start is called before the first frame update
@@ -90,13 +128,18 @@ public class GameManager : MonoBehaviour
         // Seed RNG
         Random.InitState((int)System.DateTime.Now.Ticks);
 
+        // Load settings
+        loadSettings();
+
         // Generate terrain
         terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
         TerrainGen generator = terrain.GetComponent<TerrainGen>();
         generator.Generate();
 
         // ---- Spawning ----
-        SpawnItems(1, 1, 1, 1);
+        int[] itemCounts = getItemCounts();
+        SpawnItems(itemCounts[0], itemCounts[1], itemCounts[2], itemCounts[3]);
+        // TODO spawn robots
         // ------------------
 
 

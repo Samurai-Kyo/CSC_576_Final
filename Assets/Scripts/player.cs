@@ -17,7 +17,7 @@ public class player : MonoBehaviour
     public bool paused = false;
 
     // Stats
-    public int health = 3;
+    public int health;
     public float stamina = 100;
 
 
@@ -54,6 +54,10 @@ public class player : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        // Set player health according to difficulty
+        GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gm.loadSettings();
+        health = 3 - gm.difficulty;
     }
 
     void handleCamera() {
