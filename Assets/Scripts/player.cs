@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class player : MonoBehaviour
 {
+    // Camera
     public Camera view;
     private Vector3 originalCameraPosition;
-    private Vector3 crouchedCameraPosition;
-
 
     public GameObject flashlight;
     public CharacterController controller;
+    private GameManager gm;
 
     // Keep track of if game is paused
     public bool paused = false;
+    public Canvas pauseMenu;
+    public Slider volumeSlider;
 
     // Stats
     public int health;
@@ -41,22 +44,22 @@ public class player : MonoBehaviour
     public Vector3 facingDirection = Vector3.zero;    // Unit vector in XZ plane that keeps track of direction the player is facing
 
 
-    void Start()
-    {
+    void Start() {
         controller = GetComponent<CharacterController>();
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gm.loadSettings();
+
+        // Audio
         src = this.AddComponent<AudioSource>();
 
         // Get camera positions
         originalCameraPosition = view.transform.localPosition;
-        crouchedCameraPosition = originalCameraPosition - new Vector3(0, 0.4f, 0);
 
         // Hide cursor when playing
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Set player health according to difficulty
-        GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-        gm.loadSettings();
+        // Set player health according to difficulty;
         health = 3 - gm.difficulty;
     }
 
@@ -102,7 +105,7 @@ public class player : MonoBehaviour
         // toggle flashlight
         if (Input.GetMouseButtonDown(0)) {
             flashlight.GetComponentInChildren<Light>().enabled = !flashlight.GetComponentInChildren<Light>().enabled;
-            src.PlayOneShot(click);
+            src.PlayOneShot(click, gm.volume);
         }
 
         isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -164,15 +167,33 @@ public class player : MonoBehaviour
     }
 
     void TogglePause() {
-        paused = !paused;
+        GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        if (!paused) {
+            Time.timeScale = 0;
+            AudioListener.pause = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
-        Time.timeScale = paused ? 0f : 1f;
-        AudioListener.pause = paused;
+            // UI
+            pauseMenu.gameObject.SetActive(true);
+            volumeSlider.value = gm.volume;
+            paused = true;
+        }
+        else {
+            Time.timeScale = 1;
+            AudioListener.pause = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            // UI
+            gm.volume = volumeSlider.value;
+            pauseMenu.gameObject.SetActive(false);
+            paused = false;
+        }
     }
 
 
-    void Update()
-    {
+    void Update() {
 
         // Pause game
         if (Input.GetKeyDown(KeyCode.P)) {
@@ -183,7 +204,5 @@ public class player : MonoBehaviour
             handleMovement();
             handleCamera();
         }
-
-        
     }
 }

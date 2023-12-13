@@ -10,6 +10,7 @@ public abstract class RobotBase : MonoBehaviour
     public Animator animator;
     protected GameObject player;
     protected GameObject flare_to_follow;
+    protected GameManager gm;
 
     // Movement variables
     public Vector3 target = Vector3.zero;   // target location to move to
@@ -49,12 +50,14 @@ public abstract class RobotBase : MonoBehaviour
 
 
         // Audio setup
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         walk_src = this.AddComponent<AudioSource>();
         walk_src.clip = walk_clip;
         walk_src.loop = true;
         walk_src.spatialBlend = 1.0f;
         walk_src.rolloffMode = AudioRolloffMode.Linear;
         walk_src.maxDistance = 50f;
+        walk_src.volume = gm.volume;
         walk_src.Play();
 
         run_src = this.AddComponent<AudioSource>();
@@ -63,6 +66,7 @@ public abstract class RobotBase : MonoBehaviour
         run_src.spatialBlend = 1.0f;
         run_src.rolloffMode = AudioRolloffMode.Linear;
         run_src.maxDistance = 50f;
+        run_src.volume = gm.volume;
         run_src.Play();
 
         // This source is for playing non-footstep sounds
@@ -72,6 +76,7 @@ public abstract class RobotBase : MonoBehaviour
         other_src.spatialBlend = 1.0f;
         other_src.rolloffMode = AudioRolloffMode.Linear;
         other_src.maxDistance = 50f;
+        other_src.volume = gm.volume;
         other_src.Play();
     }
 
@@ -95,7 +100,7 @@ public abstract class RobotBase : MonoBehaviour
     protected void Explode()
     {
         player.GetComponent<player>().health -= 1;
-        GameObject.Find("GameManager").GetComponent<GameManager>().Explosion(transform.position);
+        gm.Explosion(transform.position);
         Destroy(this.gameObject);
     }
 
@@ -117,19 +122,20 @@ public abstract class RobotBase : MonoBehaviour
         // Hacky way to have the sounds play only when the robot is moving
         if (speed > 0.1f && speed < jogSpeed - 1)
         {
-            walk_src.volume = 1;
+            walk_src.volume = gm.volume;
             run_src.volume = 0;
         }
         else if (speed >= jogSpeed - 1)
         {
             walk_src.volume = 0;
-            run_src.volume = 1;
+            run_src.volume = gm.volume;
         }
         else
         {
             walk_src.volume = 0;
             run_src.volume = 0;
         }
+        other_src.volume = gm.volume;
 
     }
 }

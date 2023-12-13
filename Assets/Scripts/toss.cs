@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class toss : MonoBehaviour {
 
-    public GameObject grenadePrefab;
     public Transform cameraTrans;
+    public GameObject grenadePrefab;
     public GameObject flareFX_prefab;
     public GameObject smoke_prefab;
     public GameObject light_prefab;
@@ -14,8 +15,10 @@ public class toss : MonoBehaviour {
     public float delay = 5f;
     public float force = 15.0f;
 
+  
     // Sounds
     public AudioClip throw_clip, explosion_clip;
+    private GameManager gm;
 
     
 
@@ -24,7 +27,7 @@ public class toss : MonoBehaviour {
         cameraTrans = GameObject.Find("Camera").transform;
 
         // Set number of flares according to difficulty
-        GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         gm.loadSettings();
         numFlares = 3 - gm.difficulty;
     }
@@ -45,7 +48,8 @@ public class toss : MonoBehaviour {
         // Create audio for object
         AudioSource src = flare.GetComponent<AudioSource>();
         src.loop = true;
-        src.PlayOneShot(throw_clip);
+        src.volume = gm.volume;
+        src.PlayOneShot(throw_clip, gm.volume);
 
         // Delay before igniting
         yield return new WaitForSeconds(delay);

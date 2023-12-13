@@ -59,8 +59,6 @@ public class GameManager : MonoBehaviour
                 y = terrain.SampleHeight(new Vector3(x, 0, z)) + 1f;
             }
 
-            // TODO: ensure things dont spawn close to camp
-
             // Adjust position and rotation based on which prefab it is
             Vector3 position = new Vector3(x, y, z);
             Quaternion rotation = Quaternion.identity;
@@ -126,9 +124,6 @@ public class GameManager : MonoBehaviour
         string[] settings = File.ReadAllText(filepath).Replace("\n", "").Split(',');
         float.TryParse(settings[0], out volume);
         int.TryParse(settings[1], out difficulty);
-
-        // TODO remove
-        Debug.Log(volume.ToString() + " " + difficulty.ToString());
     }
 
     // Returns array of 4 items containg the number to spawn depending on the difficulty level
@@ -178,7 +173,12 @@ public class GameManager : MonoBehaviour
         src = GetComponent<AudioSource>();
         src.clip = storm;
         src.loop = true;
+        src.volume = volume;
         src.Play();
+    }
+
+    void Update() {
+        src.volume = volume;
     }
 
 
