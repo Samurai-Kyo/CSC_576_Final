@@ -18,7 +18,7 @@ public class endMenu : MonoBehaviour
     }
 
     void GoToMainMenu() {
-        SceneManager.LoadScene("Mainmenu");
+        SceneManager.LoadScene("MainMenu");
     }
 
 
