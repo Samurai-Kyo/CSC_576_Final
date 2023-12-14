@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,8 @@ public class Inventory : MonoBehaviour
     }
 
     public Text pickup_text; // Not required, used to display a prompt to the user, something like (Press [E] to pick up)
+    public Text inventory_ui; // The text for the inventory in the pause menu
+    public bool show_prompts = true; // Displays button prompts for picking up items
     public int[] item_counts; // The counts of the items in the inventory
     private int[] max; // An array of the max values for the inventory space for an Item at index Item.<>
     private bool just_picked_up; // Used to prevent frame quick successive pick ups
@@ -25,6 +28,12 @@ public class Inventory : MonoBehaviour
     private readonly KeyCode pick_up_key = KeyCode.E; // Used to (maybe) customize the key used to pick up the items
 
     void Start() {
+        if (pickup_text == null) {
+            Debug.Log("Be sure to include pick up text with the inventory!");
+        }
+        if (inventory_ui == null) {
+            Debug.Log("Be sure to include inventory ui text with the inventory!");
+        }
         pickup_text.gameObject.SetActive(false);
         item_counts = new int[num_item_types];
         max = new int[num_item_types];
@@ -49,7 +58,7 @@ public class Inventory : MonoBehaviour
     void OnTriggerStay(Collider other) {
         // "Input validation"
         if (!Enum.TryParse(other.name, out Item type)) return;
-        pickup_text.gameObject.SetActive(true); // Display prompt to pick up item
+        pickup_text.gameObject.SetActive(show_prompts); // Display prompt to pick up item
         if (Input.GetKey(pick_up_key) && !just_picked_up) {
             PickUpItem(other.gameObject, (int)type);
             just_picked_up = true;
@@ -77,6 +86,7 @@ public class Inventory : MonoBehaviour
         // }
         // "Collected" the item, update inventory
         item_counts[type_index] += 1;
+        UpdateInvUI();
         return true;
     }
 
@@ -88,11 +98,12 @@ public class Inventory : MonoBehaviour
 
     public void ReduceItemByNumber(int index, int amount) {
         item_counts[index] -= amount;
+        UpdateInvUI();
     }
 
     public override string ToString() {
         string result = "";
-        for (int i = 0; i < item_counts.Length - 1; ++i) {
+        for (int i = 0; i < item_counts.Length; ++i) {
             string name = ((Item) i).ToString();
             result += "(" + name + ", " + item_counts[i] + "), ";
         }
@@ -100,7 +111,21 @@ public class Inventory : MonoBehaviour
         return result;
     }
 
-    // Add display function for the pause menu
+    // Called whenever the state of the inventory changes
+    private void UpdateInvUI() {
+        string inv = "";
+        for (int i = 0; i < item_counts.Length; ++i) {
+            if (item_counts[i] <= 0) continue; // Skip empty items
+            string name = ((Item) i).ToString().ToLower().FirstCharacterToUpper();
+            inv += name + " x" + item_counts[i] + "\n";
+        }
+        inventory_ui.text = inv;
+    }
+
+    // Called by player while pausing and unpausing the game to display the UI
+    public void ShowInventory(bool show) {
+        inventory_ui.gameObject.SetActive(show);
+    }
 
     // Maybe add other things I can't think of right now
 
