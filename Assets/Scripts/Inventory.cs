@@ -12,8 +12,7 @@ public class Inventory : MonoBehaviour
     // (This can change in the future if inconvenient, could maybe use tags or something)
     enum Item {
         PLANK,
-        TINDER,
-        FLINT,
+        POT,
         TARP,
         BARREL
     }
@@ -30,8 +29,7 @@ public class Inventory : MonoBehaviour
         item_counts = new int[num_item_types];
         max = new int[num_item_types];
         max[(int) Item.PLANK] = 3;
-        max[(int) Item.TINDER] = 2;
-        max[(int) Item.FLINT] = 1;
+        max[(int) Item.POT] = 2;
         max[(int) Item.TARP] = 1;
         max[(int) Item.BARREL] = 1;
         just_picked_up = false;

@@ -30,10 +30,9 @@ public class PlayerCampBuilder : MonoBehaviour
     enum Item
     {
         PLANK = 0,
-        TINDER = 1,
-        FLINT = 2,
-        TARP = 3,
-        BARREL = 4
+        POT = 1,
+        TARP = 2,
+        BARREL = 3
     }
 
 
@@ -57,9 +56,9 @@ public class PlayerCampBuilder : MonoBehaviour
             built[i] = false;
         }
     }
-    // PLAYER INVENTORY (0: PLANK, 1: TINDER, 2: FLINT, 3: TARP, 4: BARREL)
+    // PLAYER INVENTORY (0: PLANK, 1: POT, 2: TARP, 3: BARREL)
     // Tent: 1 PLANK, 2 TARP
-    // Fire: 2 PLANK, 1 pot
+    // Fire: 2 PLANK, 1 POT
     // Water: 1 TARP, 1 BARREL
     // Fence: 4 PLANK
     // Player builds camp
@@ -77,10 +76,10 @@ public class PlayerCampBuilder : MonoBehaviour
                 built[0] = true;
             }
             else if (other.gameObject.name == "Fire Area" && inventory.GetItemCounts()[(int)Item.PLANK] >= 2 &&
-                    inventory.GetItemCounts()[(int)Item.BARREL] >= 1)
+                    inventory.GetItemCounts()[(int)Item.POT] >= 1)
             {
                 inventory.ReduceItemByNumber((int)Item.PLANK, 2);
-                inventory.ReduceItemByNumber((int)Item.BARREL, 1);
+                inventory.ReduceItemByNumber((int)Item.POT, 1);
                 fire_pit_spawner.SetActive(false);
                 fire_pit.SetActive(true);
                 built[1] = true;
