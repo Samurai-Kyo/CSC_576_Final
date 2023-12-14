@@ -60,7 +60,7 @@ public class SoundRobot : RobotBase
 
 
     // Robot will collect information about it's surroundings
-    // Make it a corotuine to improve performance - run a few times a second instead of 30-60 times a second
+    // Make it a coroutine to improve performance - run a few times a second instead of 30-60 times a second
     protected override IEnumerator Sense()
     {
         WaitForSeconds wait = new WaitForSeconds(senseDelay);

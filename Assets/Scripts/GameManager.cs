@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
             float z = Random.Range(zMin, zMax);
             float y = terrain.SampleHeight(new Vector3(x, 0, z)) + 1f;
 
-            // Regenerate random point if it is too clsoe to the camp
+            // Regenerate random point if it is too close to the camp
             while (RobotBase.distance_2d(campsite_center, new Vector3(x, y, z)) < 20) {
                 x = Random.Range(xMin, xMax);
                 z = Random.Range(zMin, zMax);
@@ -129,11 +129,11 @@ public class GameManager : MonoBehaviour
         int.TryParse(settings[1], out difficulty);
     }
 
-    // Returns array of 4 items containg the number to spawn depending on the difficulty level
+    // Returns array of 4 items containing the number to spawn depending on the difficulty level
     public int[] getItemCounts() {
         int[] counts = new int[4];
 
-        // Minimum number of each resoruce required to win
+        // Minimum number of each resource required to win
         int minTarps = 3;
         int minLogs = 7;
         int minBarrels = 1;

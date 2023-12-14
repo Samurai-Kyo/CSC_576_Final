@@ -27,41 +27,55 @@ public class playerUI : MonoBehaviour
     public Button playAgainButton, mainMenuButton;
     public GameObject deathMessage;
 
-    void Start() {
+    void Start()
+    {
         player = this.gameObject;
         stamina_bar_initial_scale = stamina_bar.transform.localScale.x;
 
         playAgainButton.onClick.AddListener(() => SceneManager.LoadScene("SampleScene"));
         mainMenuButton.onClick.AddListener(() => SceneManager.LoadScene("MainMenu"));
-        deathMessage.gameObject.SetActive(false);
+        deathMessage.SetActive(false);
+
+        Time.timeScale = 1;
+        AudioListener.pause = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Display correct number of hearts based on health
-    void healthUI() {
-        for (int i = 0; i < 3; i++) {
-            if (i < GetComponent<player>().health) {
+    void HealthUI()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (i < GetComponent<player>().health)
+            {
                 hearts[i].gameObject.SetActive(true);
             }
-            else {
+            else
+            {
                 hearts[i].gameObject.SetActive(false);
             }
         }
     }
 
     // Display correct number of flares in UI
-    void flareUI() {
-        for (int i = 0; i < 3; i++) {
-            if (i < GetComponent<toss>().numFlares) {
+    void FlareUI()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (i < GetComponent<toss>().numFlares)
+            {
                 flares[i].gameObject.SetActive(true);
             }
-            else {
+            else
+            {
                 flares[i].gameObject.SetActive(false);
             }
         }
     }
 
     // Handles the animation for the stamina bar
-    void staminaUI()
+    void StaminaUI()
     {
         float stamina = player.GetComponent<player>().stamina;
         Vector3 scale = stamina_bar.transform.localScale;
@@ -69,16 +83,24 @@ public class playerUI : MonoBehaviour
         stamina_bar.transform.localScale = scale;
     }
 
-    void coordsTextUI() {
-        int x = (int) player.transform.position.x;
+    void CoordsTextUI()
+    {
+        int x = (int)player.transform.position.x;
         int z = (int)player.transform.position.z;
         string pos = string.Format("({0}, {1})", x, z);
         coordsText.text = pos;
     }
 
-    void deathUI() {
-        if (GetComponent<player>().health <= 0) {
+    void DeathUI()
+    {
+        if (GetComponent<player>().health <= 0)
+        {
             // Free cursor
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            Time.timeScale = 0;
+            AudioListener.pause = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
@@ -87,12 +109,13 @@ public class playerUI : MonoBehaviour
         }
     }
 
-    
-    void Update() {
-        healthUI();
-        flareUI();
-        staminaUI();
-        coordsTextUI();
-        deathUI();
+
+    void Update()
+    {
+        HealthUI();
+        FlareUI();
+        StaminaUI();
+        CoordsTextUI();
+        DeathUI();
     }
 }
