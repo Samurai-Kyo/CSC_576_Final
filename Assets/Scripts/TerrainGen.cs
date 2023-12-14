@@ -129,10 +129,10 @@ public class TerrainGen : MonoBehaviour
                 float d = Mathf.Sqrt((width/2 - x) * (width/2 - x) + (height/2 - y) * (height/2 - y));
 
 
-                if (d < 10) { // Force campsite height to 0.5
+                if (d < 13) { // Force campsite height to 0.5
                     heights[x, y] = 0.5f;
                 }
-                else if (d >= 10 && d <= 20) { // smooth transition from campsite to surrounding terrain
+                else if (d >= 13 && d <= 20) { // smooth transition from campsite to surrounding terrain
                     float scale = 1 - Mathf.Exp(-k * Mathf.Pow(d, 4));
                     scale = Mathf.Clamp(scale, 0.5f, 1f);
                     heights[x, y] = Mathf.Clamp(heights[x,y] * scale, 0.5f, 1);
