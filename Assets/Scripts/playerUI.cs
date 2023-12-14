@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class playerUI : MonoBehaviour
 {
@@ -22,10 +23,17 @@ public class playerUI : MonoBehaviour
     // Coordinates UI
     public Text coordsText;
 
+    // Death UI
+    public Button playAgainButton, mainMenuButton;
+    public GameObject deathMessage;
+
     void Start() {
         player = this.gameObject;
         stamina_bar_initial_scale = stamina_bar.transform.localScale.x;
 
+        playAgainButton.onClick.AddListener(() => SceneManager.LoadScene("SampleScene"));
+        mainMenuButton.onClick.AddListener(() => SceneManager.LoadScene("MainMenu"));
+        deathMessage.gameObject.SetActive(false);
     }
 
     // Display correct number of hearts based on health
@@ -68,15 +76,23 @@ public class playerUI : MonoBehaviour
         coordsText.text = pos;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    void deathUI() {
+        if (GetComponent<player>().health <= 0) {
+            // Free cursor
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
+            // show death UI (restart button + main menu button)
+            deathMessage.gameObject.SetActive(true);
+        }
+    }
+
+    
+    void Update() {
         healthUI();
         flareUI();
         staminaUI();
         coordsTextUI();
-
-
+        deathUI();
     }
 }

@@ -200,7 +200,7 @@ public class player : MonoBehaviour
             TogglePause();
         }
 
-        if (!paused) {
+        if (!paused && health >= 1) {
             handleMovement();
             handleCamera();
         }
