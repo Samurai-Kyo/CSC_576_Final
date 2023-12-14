@@ -104,7 +104,7 @@ public class PlayerCampBuilder : MonoBehaviour
             }
             else if (other.gameObject.name == "Radio Area" && camp_pieces_built[0] && camp_pieces_built[1] && camp_pieces_built[2] && camp_pieces_built[3])
             {
-                SceneLoader.LoadScene("WinScene");
+                SceneLoader.LoadScene("EndMenu");
             }
 
         }
