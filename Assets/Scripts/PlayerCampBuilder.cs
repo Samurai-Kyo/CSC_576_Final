@@ -24,9 +24,10 @@ public class PlayerCampBuilder : MonoBehaviour
     private GameObject fence_spawner;
     private GameObject fence;
     private readonly KeyCode build_camp_item_key = KeyCode.E;
-    private readonly bool[] built = new bool[4];
-    public Inventory inventory;
+    private readonly bool[] camp_pieces_built = new bool[4];
+    private Inventory inventory;
 
+    // Inventory management
     enum Item
     {
         PLANK = 0,
@@ -38,6 +39,7 @@ public class PlayerCampBuilder : MonoBehaviour
 
     void Start()
     {
+        // Get player inventory so we can check if they have the items need to build
         inventory = GameObject.Find("Player").GetComponent<Inventory>();
 
         // Initialize camp objects
@@ -50,10 +52,10 @@ public class PlayerCampBuilder : MonoBehaviour
         fence = fence_area.transform.GetChild(0).gameObject;
         fence_spawner = fence_area.transform.GetChild(1).gameObject;
 
-        // initialize built array to false
-        for (int i = 0; i < built.Length; i++)
+        // initialize the items built array to false
+        for (int i = 0; i < camp_pieces_built.Length; i++)
         {
-            built[i] = false;
+            camp_pieces_built[i] = false;
         }
     }
     // PLAYER INVENTORY (0: PLANK, 1: POT, 2: TARP, 3: BARREL)
@@ -73,7 +75,7 @@ public class PlayerCampBuilder : MonoBehaviour
                 inventory.ReduceItemByNumber((int)Item.TARP, 2);
                 tent_spawner.SetActive(false);
                 tent.SetActive(true);
-                built[0] = true;
+                camp_pieces_built[0] = true;
             }
             else if (other.gameObject.name == "Fire Area" && inventory.GetItemCounts()[(int)Item.PLANK] >= 2 &&
                     inventory.GetItemCounts()[(int)Item.POT] >= 1)
@@ -82,7 +84,7 @@ public class PlayerCampBuilder : MonoBehaviour
                 inventory.ReduceItemByNumber((int)Item.POT, 1);
                 fire_pit_spawner.SetActive(false);
                 fire_pit.SetActive(true);
-                built[1] = true;
+                camp_pieces_built[1] = true;
             }
             else if (other.gameObject.name == "Water Area" && inventory.GetItemCounts()[(int)Item.TARP] >= 1 &&
                     inventory.GetItemCounts()[(int)Item.BARREL] >= 1)
@@ -91,16 +93,16 @@ public class PlayerCampBuilder : MonoBehaviour
                 inventory.ReduceItemByNumber((int)Item.BARREL, 1);
                 water_catcher_spawner.SetActive(false);
                 water_catcher.SetActive(true);
-                built[2] = true;
+                camp_pieces_built[2] = true;
             }
             else if (other.gameObject.name == "Fence Area" && inventory.GetItemCounts()[(int)Item.PLANK] >= 4)
             {
                 inventory.ReduceItemByNumber((int)Item.PLANK, 4);
                 fence_spawner.SetActive(false);
                 fence.SetActive(true);
-                built[3] = true;
+                camp_pieces_built[3] = true;
             }
-            else if (other.gameObject.name == "Radio Area" && built[0] && built[1] && built[2] && built[3])
+            else if (other.gameObject.name == "Radio Area" && camp_pieces_built[0] && camp_pieces_built[1] && camp_pieces_built[2] && camp_pieces_built[3])
             {
                 SceneLoader.LoadScene("WinScene");
             }

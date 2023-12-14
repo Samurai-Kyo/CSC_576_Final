@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class camp_spawner : MonoBehaviour
+public class CampSpawner : MonoBehaviour
 {
     // Master objects of the camp
     public GameObject tent_area;
@@ -31,16 +31,5 @@ public class camp_spawner : MonoBehaviour
         fire_pit.SetActive(false);
         fence.SetActive(false);
     }
-
-    // void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.gameObject.CompareTag("Player"))
-    //     {
-    //         tent_spawner.SetActive(true);
-    //         water_catcher_spawner.SetActive(true);
-    //         fire_pit_spawner.SetActive(true);
-    //         fence_spawner.SetActive(true);
-    //     }
-    // }
 }
 
