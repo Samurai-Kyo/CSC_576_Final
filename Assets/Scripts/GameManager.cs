@@ -119,8 +119,11 @@ public class GameManager : MonoBehaviour
 
     public void loadSettings() {
         string filepath = Path.Combine(Application.persistentDataPath, "settings.txt");
-        
+
         // Read and parse settings
+        if (!File.Exists(filepath)) { // if file doesn't exist, create it with default values
+            File.WriteAllText(filepath, "0.5,0");
+        }
         string[] settings = File.ReadAllText(filepath).Replace("\n", "").Split(',');
         float.TryParse(settings[0], out volume);
         int.TryParse(settings[1], out difficulty);
