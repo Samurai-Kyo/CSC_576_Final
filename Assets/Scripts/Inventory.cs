@@ -19,7 +19,7 @@ public class Inventory : MonoBehaviour
     }
 
     public Text pickup_text; // Not required, used to display a prompt to the user, something like (Press [E] to pick up)
-    private int[] item_counts; // The counts of the items in the inventory
+    public int[] item_counts; // The counts of the items in the inventory
     private int[] max; // An array of the max values for the inventory space for an Item at index Item.<>
     private bool just_picked_up; // Used to prevent frame quick successive pick ups
     private readonly int num_item_types = 5; // Number of item types
@@ -86,6 +86,10 @@ public class Inventory : MonoBehaviour
         int[] copy = new int[item_counts.Length];
         item_counts.CopyTo(copy, 0);
         return copy;
+    }
+
+    public void ReduceItemByNumber(int index, int amount) {
+        item_counts[index] -= amount;
     }
 
     public override string ToString() {
