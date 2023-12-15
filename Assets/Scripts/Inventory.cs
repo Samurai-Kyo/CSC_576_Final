@@ -141,8 +141,8 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < item_counts.Length; ++i)
         {
             //if (item_counts[i] <= 0) continue; // Skip empty items
-            string name = ((Item)i).ToString().ToLower().FirstCharacterToUpper();
-            inv += name + 's' + " x" + item_counts[i] + "\n";
+            string name = ((Item) i).ToString().ToLower().FirstCharacterToUpper();
+            inv += name + 's' + " x" + item_counts[i] + " / " + max[i] + "\n";
         }
         inventory_ui.text = inv;
     }
