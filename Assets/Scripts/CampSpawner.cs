@@ -19,11 +19,11 @@ public class CampSpawner : MonoBehaviour
     void Start()
     {
         // Initialize child objects
-        tent                    = tent_area.transform.GetChild(0).gameObject;
-        fire_pit                = fire_area.transform.GetChild(0).gameObject;
-        water_catcher           = water_catcher_area.transform.GetChild(0).gameObject;
-        fence                   = fence_area.transform.GetChild(0).gameObject;
-       
+        tent = tent_area.transform.GetChild(0).gameObject;
+        fire_pit = fire_area.transform.GetChild(0).gameObject;
+        water_catcher = water_catcher_area.transform.GetChild(0).gameObject;
+        fence = fence_area.transform.GetChild(0).gameObject;
+
 
         // Hide objects you need to build
         tent.SetActive(false);

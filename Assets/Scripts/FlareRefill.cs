@@ -9,7 +9,8 @@ public class FlareRefill : MonoBehaviour
     private readonly KeyCode pickup_flare_button = KeyCode.E;
     private toss flare_manager;
 
-    void Start (){
+    void Start()
+    {
         flare_manager = GameObject.Find("Player").GetComponent<toss>();
     }
 

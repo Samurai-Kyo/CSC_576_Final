@@ -44,7 +44,8 @@ public class player : MonoBehaviour
     public Vector3 facingDirection = Vector3.zero;    // Unit vector in XZ plane that keeps track of direction the player is facing
 
 
-    void Start() {
+    void Start()
+    {
         controller = GetComponent<CharacterController>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         gm.loadSettings();
@@ -63,7 +64,8 @@ public class player : MonoBehaviour
         health = 3 - gm.difficulty;
     }
 
-    void handleCamera() {
+    void handleCamera()
+    {
 
         // Get direction player is facing
         float xdirection = Mathf.Sin(Mathf.Deg2Rad * transform.rotation.eulerAngles.y);
@@ -80,13 +82,15 @@ public class player : MonoBehaviour
         view.transform.Rotate(Vector3.left, y_rotation);
 
         // Lower camera if crouching
-        if (isCrouching) {
+        if (isCrouching)
+        {
             Vector3 nextPos = view.transform.localPosition;
             nextPos.y -= Time.deltaTime * 3f;
             nextPos.y = Mathf.Max(nextPos.y, originalCameraPosition.y - 0.4f);
             view.transform.localPosition = nextPos;
         }
-        else {
+        else
+        {
             Vector3 nextPos = view.transform.localPosition;
             nextPos.y += Time.deltaTime * 3f;
             nextPos.y = Mathf.Min(nextPos.y, originalCameraPosition.y);
@@ -94,7 +98,8 @@ public class player : MonoBehaviour
         }
     }
 
-    void handleMovement() {
+    void handleMovement()
+    {
 
         // X-Z directions control horizontal movement
         // Y direction controls vertical movement
@@ -103,7 +108,8 @@ public class player : MonoBehaviour
         Vector3 move = Vector3.zero;
 
         // toggle flashlight
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0))
+        {
             flashlight.GetComponentInChildren<Light>().enabled = !flashlight.GetComponentInChildren<Light>().enabled;
             src.PlayOneShot(click, gm.volume);
         }
@@ -114,7 +120,8 @@ public class player : MonoBehaviour
         if (Input.GetKey(KeyCode.W)) // forward movement
         {
             speed = walkSpeed;
-            if (isRunning && stamina > 0) {
+            if (isRunning && stamina > 0)
+            {
                 speed = runSpeed;
                 stamina -= stamina_cost * Time.deltaTime;
             }
@@ -137,14 +144,16 @@ public class player : MonoBehaviour
         }
 
         // Crouching
-        if (isCrouching) {
+        if (isCrouching)
+        {
             speed = crouchSpeed;
             // Camera change done in handleCamera()
         }
-        
+
 
         // Jumping
-        if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded) {
+        if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
+        {
             y_velocity = jumpSpeed;
         }
 
@@ -159,16 +168,19 @@ public class player : MonoBehaviour
         controller.Move(move * Time.deltaTime);
 
         // Recover stamina when not running
-        if (!isRunning) {
+        if (!isRunning)
+        {
             stamina += stamina_cost * Time.deltaTime;
             stamina = Mathf.Clamp(stamina, 0, 100);
         }
-        
+
     }
 
-    void TogglePause() {
+    void TogglePause()
+    {
         GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-        if (!paused) {
+        if (!paused)
+        {
             Time.timeScale = 0;
             AudioListener.pause = true;
             Cursor.lockState = CursorLockMode.None;
@@ -179,7 +191,8 @@ public class player : MonoBehaviour
             volumeSlider.value = gm.volume;
             paused = true;
         }
-        else {
+        else
+        {
             Time.timeScale = 1;
             AudioListener.pause = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -193,14 +206,17 @@ public class player : MonoBehaviour
     }
 
 
-    void Update() {
+    void Update()
+    {
 
         // Pause game
-        if (Input.GetKeyDown(KeyCode.P)) {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
             TogglePause();
         }
 
-        if (!paused && health >= 1) {
+        if (!paused && health >= 1)
+        {
             handleMovement();
             handleCamera();
         }

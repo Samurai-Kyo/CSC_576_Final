@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Returns array of 4 items containing the number to spawn depending on the difficulty level
-    public int[] getItemCounts()
+    public int[] GetItemCounts()
     {
         int[] counts = new int[4];
 
@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
         campsite_center = GameObject.Find("campsite_center").transform.position;
 
         // ---- Spawning ----
-        int[] itemCounts = getItemCounts();
+        int[] itemCounts = GetItemCounts();
         SpawnItems(itemCounts[0], itemCounts[1], itemCounts[2], itemCounts[3]);
         SpawnRobots();
         // ------------------

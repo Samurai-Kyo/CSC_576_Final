@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class toss : MonoBehaviour {
+public class toss : MonoBehaviour
+{
 
     public Transform cameraTrans;
     public GameObject grenadePrefab;
@@ -15,15 +16,16 @@ public class toss : MonoBehaviour {
     public float delay = 5f;
     public float force = 15.0f;
 
-  
+
     // Sounds
     public AudioClip throw_clip, explosion_clip;
     private GameManager gm;
 
-    
+
 
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         cameraTrans = GameObject.Find("Camera").transform;
 
         // Set number of flares according to difficulty
@@ -32,7 +34,8 @@ public class toss : MonoBehaviour {
         numFlares = 3 - gm.difficulty;
     }
 
-    IEnumerator Toss() {
+    IEnumerator Toss()
+    {
         // Calculate spawn location
         Vector3 spawn = cameraTrans.position + cameraTrans.forward; // spawn a bit in front of camera
 
@@ -58,7 +61,7 @@ public class toss : MonoBehaviour {
         // Spawn particle system and light
         GameObject particles = Instantiate(flareFX_prefab, flare.transform.position, Quaternion.identity);
         GameObject light = Instantiate(light_prefab, flare.transform.position, Quaternion.identity);
-        
+
         // Ensure that the particle system and light follow the flare as it rolls
         particles.transform.parent = flare.transform;
         light.transform.parent = flare.transform;
@@ -82,10 +85,11 @@ public class toss : MonoBehaviour {
         bool paused = GetComponent<player>().paused;
 
         // If player presses E, throw flare
-        if (!paused && Input.GetKeyDown(KeyCode.F) && numFlares > 0) {
+        if (!paused && Input.GetKeyDown(KeyCode.F) && numFlares > 0)
+        {
             numFlares--;
             StartCoroutine(Toss());
         }
-        
+
     }
 }

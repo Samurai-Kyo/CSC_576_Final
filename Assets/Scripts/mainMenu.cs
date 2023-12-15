@@ -18,25 +18,29 @@ public class mainMenu : MonoBehaviour
     public string filepath;
 
 
-    void startGame() {
+    void startGame()
+    {
         SceneManager.LoadScene("SampleScene");
     }
 
-    void showStart() {
+    void showStart()
+    {
         mainCanvas.gameObject.SetActive(true);
         instructionsCanvas.gameObject.SetActive(false);
         controlsCanvas.gameObject.SetActive(false);
         settingsCanvas.gameObject.SetActive(false);
     }
 
-    void showInstructions() {
+    void showInstructions()
+    {
         mainCanvas.gameObject.SetActive(false);
         instructionsCanvas.gameObject.SetActive(true);
         controlsCanvas.gameObject.SetActive(false);
         settingsCanvas.gameObject.SetActive(false);
     }
 
-    void showControls() {
+    void showControls()
+    {
         mainCanvas.gameObject.SetActive(false);
         instructionsCanvas.gameObject.SetActive(false);
         controlsCanvas.gameObject.SetActive(true);
@@ -52,7 +56,8 @@ public class mainMenu : MonoBehaviour
     }
 
     // Write values to file that will be parsed by GameManager during setup for the main scene
-    public void confirmSettings() {
+    public void confirmSettings()
+    {
         float vol = volume.value;
         float diff = difficulty.value;
 
@@ -60,7 +65,8 @@ public class mainMenu : MonoBehaviour
     }
 
 
-    void Start() {
+    void Start()
+    {
         // Setup filepath where we will write the settings values to
         filepath = Path.Combine(Application.persistentDataPath, "settings.txt");
 

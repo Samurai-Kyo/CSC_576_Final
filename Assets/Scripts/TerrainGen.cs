@@ -34,7 +34,8 @@ public class TerrainGen : MonoBehaviour
     public float heightThreshold = 0.6f;  // Height at which texture will be grass instead of dirt
 
 
-    public void Generate() {
+    public void Generate()
+    {
         // Randomize offset so we get different terrain each time
         offsetX = Random.Range(0f, 9999f);
         offsetY = Random.Range(0f, 9999f);
@@ -54,20 +55,25 @@ public class TerrainGen : MonoBehaviour
         float[,] heights = td.GetHeights(0, 0, td.heightmapResolution, td.heightmapResolution);
         float[,,] splatMap = new float[td.alphamapWidth, td.alphamapHeight, td.alphamapLayers];
 
-        for (int x = 0; x < td.alphamapWidth; x++) {
-            for (int y = 0; y < td.alphamapHeight; y++) {
+        for (int x = 0; x < td.alphamapWidth; x++)
+        {
+            for (int y = 0; y < td.alphamapHeight; y++)
+            {
                 float terrainHeight = heights[x * td.heightmapResolution / td.alphamapWidth, y * td.heightmapResolution / td.alphamapHeight];
 
                 // Check if the terrain height is below the threshold
-                if (terrainHeight < heightThreshold) {
+                if (terrainHeight < heightThreshold)
+                {
                     splatMap[x, y, 0] = 0; // Set low heights to texture 1 (dirt)
                     splatMap[x, y, 1] = 1;
                 }
-                else if (terrainHeight < heightThreshold + 0.1) { // mix textures for medium heights
+                else if (terrainHeight < heightThreshold + 0.1)
+                { // mix textures for medium heights
                     splatMap[x, y, 0] = 0.5f;
                     splatMap[x, y, 1] = 0.5f;
                 }
-                else {
+                else
+                {
                     splatMap[x, y, 0] = 1; // Set large heights to texture 2 (grass)
                     splatMap[x, y, 1] = 0;
                 }
@@ -88,12 +94,15 @@ public class TerrainGen : MonoBehaviour
     }
 
     // Generate a height for each point on the terrain
-    float[,] GenerateHeights() {
+    float[,] GenerateHeights()
+    {
 
         // Use layered Perlin Noise to generate terrain
         float[,] heights = new float[width, height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
                 // Convert coords to floats + add random offset
                 float xcoord = (float)x / width * scale + offsetX;
                 float ycoord = (float)y / height * scale + offsetY;
@@ -121,21 +130,26 @@ public class TerrainGen : MonoBehaviour
     }
 
     // Post-process terrain so there is a flat area at the center for a campsite
-    float[,] PostProcess(float[,] heights) {
+    float[,] PostProcess(float[,] heights)
+    {
         float k = 0.00003f; // found via trial and error
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                float d = Mathf.Sqrt((width/2 - x) * (width/2 - x) + (height/2 - y) * (height/2 - y));
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                float d = Mathf.Sqrt((width / 2 - x) * (width / 2 - x) + (height / 2 - y) * (height / 2 - y));
 
 
-                if (d < 13) { // Force campsite height to 0.5
+                if (d < 13)
+                { // Force campsite height to 0.5
                     heights[x, y] = 0.5f;
                 }
-                else if (d >= 13 && d <= 20) { // smooth transition from campsite to surrounding terrain
+                else if (d >= 13 && d <= 20)
+                { // smooth transition from campsite to surrounding terrain
                     float scale = 1 - Mathf.Exp(-k * Mathf.Pow(d, 4));
                     scale = Mathf.Clamp(scale, 0.5f, 1f);
-                    heights[x, y] = Mathf.Clamp(heights[x,y] * scale, 0.5f, 1);
+                    heights[x, y] = Mathf.Clamp(heights[x, y] * scale, 0.5f, 1);
                 }
 
             }
@@ -144,6 +158,6 @@ public class TerrainGen : MonoBehaviour
     }
 
 }
-    
+
 
 

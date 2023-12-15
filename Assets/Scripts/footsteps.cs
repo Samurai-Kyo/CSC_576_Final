@@ -52,12 +52,12 @@ public class footsteps : MonoBehaviour
 
 
         // If on the ground and moving
-        if (controller.isGrounded &&  (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
+        if (controller.isGrounded && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
         {
             AudioSource src = Input.GetKey(KeyCode.LeftShift) ? run_src : Input.GetKey(KeyCode.C) ? crouch_src : walk_src;
             src.volume = gm.volume;
         }
 
-        
+
     }
 }
