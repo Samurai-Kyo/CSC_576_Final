@@ -9,9 +9,9 @@ Authors:
 ## SCRIPTS:
 If it only says 1 name, that means they did all of it.
 
-NAME		# of LINES		AUTHOR
-
 People rewrote code as nessesary. We used Github later in our project, so we weren't tracking that. 
+
+(NAME)		(# of LINES)		(AUTHOR)
 
 - CampSpawner 		36	Keith
 - endMenu 			37	Keith
