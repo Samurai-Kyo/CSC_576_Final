@@ -95,9 +95,9 @@ public class PlayerCampBuilder : MonoBehaviour
                 water_catcher.SetActive(true);
                 camp_pieces_built[2] = true;
             }
-            else if (other.gameObject.name == "Fence Area" && inventory.GetItemCounts()[(int)Item.PLANK] >= 4)
+            else if (other.gameObject.name == "Fence Area" && inventory.GetItemCounts()[(int)Item.PLANK] >= 3)
             {
-                inventory.ReduceItemByNumber((int)Item.PLANK, 4);
+                inventory.ReduceItemByNumber((int)Item.PLANK, 3);
                 fence_spawner.SetActive(false);
                 fence.SetActive(true);
                 camp_pieces_built[3] = true;

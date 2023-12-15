@@ -47,13 +47,15 @@ public class GameManager : MonoBehaviour
     // Spawns the given prefab n times randomly throughout the world
     void SpawnNPrefabs(GameObject prefab, int n)
     {
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++)
+        {
             float x = Random.Range(xMin, xMax);
             float z = Random.Range(zMin, zMax);
             float y = terrain.SampleHeight(new Vector3(x, 0, z)) + 1f;
 
             // Regenerate random point if it is too close to the camp
-            while (RobotBase.distance_2d(campsite_center, new Vector3(x, y, z)) < 20) {
+            while (RobotBase.distance_2d(campsite_center, new Vector3(x, y, z)) < 20)
+            {
                 x = Random.Range(xMin, xMax);
                 z = Random.Range(zMin, zMax);
                 y = terrain.SampleHeight(new Vector3(x, 0, z)) + 1f;
@@ -75,35 +77,42 @@ public class GameManager : MonoBehaviour
                 position.y += 1;
             }
 
-            // If it's not a robot prefab, it must be an item prefab, so spawn item marker as well
-            if (prefab != sightRobot_prefab && prefab != soundRobot_prefab) {
-                Instantiate(item_prefab, position + new Vector3(0, 1, 0), Quaternion.identity);
+            GameObject thing = Instantiate(prefab, position, rotation);
+
+            // If it's not a robot prefab, it must be an item prefab, so spawn item marker as a child of prefab
+            if (prefab != sightRobot_prefab && prefab != soundRobot_prefab)
+            {
+                GameObject item = Instantiate(item_prefab, position, rotation);
+                item.transform.SetParent(thing.transform);
+                item.name = "Item Light";
             }
-
-            Instantiate(prefab, position, rotation);
-
         }
     }
 
 
     // Spawns a given number of each item throughout the world randomly
-    void SpawnItems(int numTarps, int numLogs, int numBarrels, int numPots) {
+    void SpawnItems(int numTarps, int numLogs, int numBarrels, int numPots)
+    {
         SpawnNPrefabs(tarp_prefab, numTarps);
         SpawnNPrefabs(log_prefab, numLogs);
         SpawnNPrefabs(barrel_prefab, numBarrels);
         SpawnNPrefabs(pot_prefab, numPots);
     }
 
-    void SpawnRobots() {
-        if (difficulty == 0) {
+    void SpawnRobots()
+    {
+        if (difficulty == 0)
+        {
             SpawnNPrefabs(sightRobot_prefab, 5);
             SpawnNPrefabs(soundRobot_prefab, 5);
         }
-        else if (difficulty == 1) {
+        else if (difficulty == 1)
+        {
             SpawnNPrefabs(sightRobot_prefab, 8);
             SpawnNPrefabs(soundRobot_prefab, 8);
         }
-        else {
+        else
+        {
             SpawnNPrefabs(sightRobot_prefab, 10);
             SpawnNPrefabs(soundRobot_prefab, 10);
         }
@@ -112,16 +121,19 @@ public class GameManager : MonoBehaviour
     // Creates an explosion at the specified location
     // Need to do this here rather than in robot scrip[t since destroying the robot
     // cuts the animation and sound off early
-    public void Explosion(Vector3 position) {
+    public void Explosion(Vector3 position)
+    {
         src.PlayOneShot(explosion_clip, 2f);
         Instantiate(explosion_fx, position, Quaternion.identity);
     }
 
-    public void loadSettings() {
+    public void loadSettings()
+    {
         string filepath = Path.Combine(Application.persistentDataPath, "settings.txt");
 
         // Read and parse settings
-        if (!File.Exists(filepath)) { // if file doesn't exist, create it with default values
+        if (!File.Exists(filepath))
+        { // if file doesn't exist, create it with default values
             File.WriteAllText(filepath, "0.5,0");
         }
         string[] settings = File.ReadAllText(filepath).Replace("\n", "").Split(',');
@@ -130,7 +142,8 @@ public class GameManager : MonoBehaviour
     }
 
     // Returns array of 4 items containing the number to spawn depending on the difficulty level
-    public int[] getItemCounts() {
+    public int[] getItemCounts()
+    {
         int[] counts = new int[4];
 
         // Minimum number of each resource required to win
@@ -152,6 +165,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        tarp_prefab.name = "TARP";
+        barrel_prefab.name = "BARREL";
+        log_prefab.name = "PLANK";
+        pot_prefab.name = "POT";
+
         // Seed RNG
         Random.InitState((int)System.DateTime.Now.Ticks);
 
@@ -180,7 +198,8 @@ public class GameManager : MonoBehaviour
         src.Play();
     }
 
-    void Update() {
+    void Update()
+    {
         src.volume = volume;
     }
 

@@ -13,18 +13,24 @@ public class endMenu : MonoBehaviour
     public Canvas mainCanvas;
 
 
-    void RestartGame() {
+    void RestartGame()
+    {
         SceneManager.LoadScene("SampleScene");
     }
 
-    void GoToMainMenu() {
+    void GoToMainMenu()
+    {
         SceneManager.LoadScene("MainMenu");
     }
 
 
-    void Start() {
+    void Start()
+    {
         restartButton.onClick.AddListener(RestartGame);
         startMenuButton.onClick.AddListener(GoToMainMenu);
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
 }

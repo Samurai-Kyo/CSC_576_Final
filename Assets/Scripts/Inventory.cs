@@ -24,7 +24,7 @@ public class Inventory : MonoBehaviour
     public int[] item_counts; // The counts of the items in the inventory
     private int[] max; // An array of the max values for the inventory space for an Item at index Item.<>
     private bool just_picked_up; // Used to prevent frame quick successive pick ups
-    private readonly int num_item_types = 5; // Number of item types
+    private readonly int num_item_types = 4; // Number of item types
     private readonly KeyCode pick_up_key = KeyCode.E; // Used to (maybe) customize the key used to pick up the items
 
     void Start() {
@@ -37,11 +37,13 @@ public class Inventory : MonoBehaviour
         pickup_text.gameObject.SetActive(false);
         item_counts = new int[num_item_types];
         max = new int[num_item_types];
-        max[(int) Item.PLANK] = 3;
+        max[(int) Item.PLANK] = 4;
         max[(int) Item.POT] = 2;
-        max[(int) Item.TARP] = 1;
-        max[(int) Item.BARREL] = 1;
+        max[(int) Item.TARP] = 2;
+        max[(int) Item.BARREL] = 2;
         just_picked_up = false;
+
+        UpdateInvUI();
     }
 
     private void Update() {
@@ -56,8 +58,11 @@ public class Inventory : MonoBehaviour
     }
 
     void OnTriggerStay(Collider other) {
+
+        // delete (clone) pare of name
+        string item_name = other.name[..^7];
         // "Input validation"
-        if (!Enum.TryParse(other.name, out Item type)) return;
+        if (!Enum.TryParse(item_name, out Item type)) return;
         pickup_text.gameObject.SetActive(show_prompts); // Display prompt to pick up item
         if (Input.GetKey(pick_up_key) && !just_picked_up) {
             PickUpItem(other.gameObject, (int)type);
@@ -115,9 +120,9 @@ public class Inventory : MonoBehaviour
     private void UpdateInvUI() {
         string inv = "";
         for (int i = 0; i < item_counts.Length; ++i) {
-            if (item_counts[i] <= 0) continue; // Skip empty items
+            //if (item_counts[i] <= 0) continue; // Skip empty items
             string name = ((Item) i).ToString().ToLower().FirstCharacterToUpper();
-            inv += name + " x" + item_counts[i] + "\n";
+            inv += name + 's' + " x" + item_counts[i] + "\n";
         }
         inventory_ui.text = inv;
     }
