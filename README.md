@@ -27,5 +27,7 @@ People rewrote code as nessesary. We used Github later in our project, so we wer
 - SightRobot			179	Gregory
 - SoundRobot			177	Gregory
 - TerrainGen			164	Gregory
+    - Followed these youtube videos: https://www.youtube.com/watch?v=vFvwyu_ZKfU&ab_channel=Brackeys and https://www.youtube.com/watch?v=WP-Bm65Q-1Y&list=PLFt_AvWsXl0eBW2EiBtl_sxmDtSgZBxB3&index=2&ab_channel=SebastianLague
+    - Derived the terrain coloring algorithm from this blog post: https://discussions.unity.com/t/how-to-automatically-apply-different-textures-on-terrain-based-on-height/2013/2
 - toss				96	Gregory
 - The hours of  concept creation, finding assets, placing objects, repositioning them, checking lighting, ingerating code, and testing all of that - eveyone
